@@ -61,7 +61,7 @@ class Evaluator:
             true_labels.extend(true_label_batch)
             ids.extend(id_batch)
             with torch.no_grad():
-                output, attn_weights = self.model(text_batch, length_batch)
+                output, attn_weights = self.model(text_batch, length_batch.cpu())
 
             loss_list = []
 
