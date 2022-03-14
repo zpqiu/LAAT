@@ -1,6 +1,6 @@
 #!/bin/sh
 python -m src.run \
-    --problem_name mimic-iii_2_full \
+    --problem_name meta_single_full \
     --max_seq_length 4000 \
     --n_epoch 50 \
     --patience 5 \

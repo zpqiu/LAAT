@@ -113,7 +113,7 @@ class Trainer:
             else:
                 length_batch = length_batch.to(device)
 
-            output, attn_weights = self.model(text_batch, length_batch)
+            output, attn_weights = self.model(text_batch, length_batch.cpu())
             loss_list = []
 
             for level in range(len(output)):

@@ -1,4 +1,13 @@
 {
+  "meta_single_full": {
+    "cache_dir": "cached_data",
+    "data_dir": "data/mimicdata/meta/full",
+    "id_col_name": "Admission_Id",
+    "label_col_names": [
+      "Full_Labels"
+    ],
+    "text_col_name": "Text"
+  },
   "mimic-iii_2_full": {
      "cache_dir": "cached_data",
      "data_dir": "data/mimicdata/mimic3/full",
