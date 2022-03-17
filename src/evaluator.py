@@ -15,6 +15,7 @@ class Evaluator:
                  vocab,
                  criterions,
                  n_training_labels,
+                 few_shot_labels=None
                  ):
         self.model = model
 
@@ -23,6 +24,7 @@ class Evaluator:
         self.multilabel = model.args.multilabel
         self.criterions = criterions
         self.n_training_labels = n_training_labels
+        self.few_shot_labels=few_shot_labels
 
     def evaluate(self,
                  dataloader: TextDataLoader) -> dict:
@@ -98,6 +100,15 @@ class Evaluator:
         for label_lvl in range(len(output)):
             scores["level_{}".format(label_lvl)] = calculate_eval_metrics(ids, true_labels[label_lvl],
                                                                           pred_probs[label_lvl], self.multilabel)
+            truths = np.asarray(true_labels[label_lvl])
+            pps = np.asarray(pred_probs[label_lvl])
+
+            few_truths = truths[:, self.few_shot_labels]
+            few_pps = pps[:, self.few_shot_labels]
+            scores["level_{}".format("few")] = calculate_eval_metrics(ids, few_truths,
+                                                                          few_pps, self.multilabel)
+            scores["level_{}".format("few")]["loss"] = 0.0
+            
             scores["level_{}".format(label_lvl)]["loss"] = -np.mean(all_loss_list[label_lvl]).item()
         scores["average"] = average_scores(scores)
         scores["average"]["loss"] = np.mean(losses).item()

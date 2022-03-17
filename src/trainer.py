@@ -21,6 +21,7 @@ class Trainer:
                  logger,
                  args,
                  checkpoint_path,
+                 few_shot_labels
                  ):
         """
         The initialisation model
@@ -47,6 +48,7 @@ class Trainer:
         self.vocab = vocab
         self.args = args
         self.save_best_model = args.save_best_model
+        self.few_shot_labels=few_shot_labels
 
         # for self attetion
         self.use_regularisation = args.use_regularisation
@@ -211,7 +213,7 @@ class Trainer:
         check_to_stop = 0
         best_epoch_num = self.best_epoch_num
         # best_state_dict = None
-        evaluator = Evaluator(self.model, self.vocab, self.criterions, self.n_training_labels)
+        evaluator = Evaluator(self.model, self.vocab, self.criterions, self.n_training_labels, few_shot_labels=self.few_shot_labels)
         for e in range(self.start_epoch + 1, n_epoch + 1):
             self.logger.info("Training epoch #{}".format(e))
             train_scores = self.train_single_epoch(e)

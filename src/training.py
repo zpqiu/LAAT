@@ -78,7 +78,8 @@ def _train_model(train_data, valid_data, test_data,
                  init_state_dict=None,
                  logger=None,
                  saved_data_file_path=None,
-                 checkpoint_path=None
+                 checkpoint_path=None,
+                 few_shot_labels=None
                  ):
     """
     Train the data
@@ -165,13 +166,15 @@ def _train_model(train_data, valid_data, test_data,
                       vocab=vocab,
                       logger=logger,
                       args=args,
-                      checkpoint_path=checkpoint_path)
+                      checkpoint_path=checkpoint_path,
+                      few_shot_labels=few_shot_labels)
     best_model, scores = trainer.train(n_epoch=args.n_epoch, patience=args.patience)
 
     evaluator = Evaluator(model=best_model,
                           vocab=vocab,
                           criterions=criterions,
-                          n_training_labels=get_n_training_labels(train_dataloader))
+                          n_training_labels=get_n_training_labels(train_dataloader),
+                          few_shot_labels=few_shot_labels)
 
     del model, lr_plateau, optimiser, evaluator, trainer, criterions
     return best_model, scores  # either on valid or test
@@ -197,11 +200,11 @@ def _get_labels(data, args):
 def run_with_validation(training_data, valid_data, test_data,
                         vocab, args, logger=None,
                         saved_data_file_path=None,
-                        checkpoint_path=None):
+                        checkpoint_path=None, few_shot_labels=None):
     best_model, scores = _train_model(
         train_data=training_data, valid_data=valid_data, test_data=test_data,
         vocab=vocab, args=args, logger=logger,
-        saved_data_file_path=saved_data_file_path, checkpoint_path=checkpoint_path)
+        saved_data_file_path=saved_data_file_path, checkpoint_path=checkpoint_path, few_shot_labels=few_shot_labels)
 
     return best_model, scores
 
